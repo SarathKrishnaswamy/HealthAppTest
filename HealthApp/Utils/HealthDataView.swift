@@ -2,6 +2,7 @@ import SwiftUI
 import HealthKit
 import Charts
 
+// Main view that displays health data
 struct HealthDataView: View {
     @State private var steps: Double = 0.0
     @State private var distance: Double = 0.0
@@ -42,11 +43,12 @@ struct HealthDataView: View {
         }
     }
 
+    // Function to fetch health data
     private func fetchHealthData() {
         healthStore.requestAuthorization { success, error in
             if success {
                 let group = DispatchGroup()
-
+                // Fetch steps
                 group.enter()
                 healthStore.fetchSteps { steps, error in
                     if let steps = steps {
@@ -63,6 +65,7 @@ struct HealthDataView: View {
                     group.leave()
                 }
 
+                // Fetch distance
                 group.enter()
                 healthStore.fetchDistance { distance, error in
                     if let distance = distance {
@@ -79,6 +82,7 @@ struct HealthDataView: View {
                     group.leave()
                 }
 
+                // Fetch heart rate
                 group.enter()
                 healthStore.fetchHeartRate { heartRates, error in
                     if let heartRates = heartRates {
@@ -95,6 +99,7 @@ struct HealthDataView: View {
                     group.leave()
                 }
 
+                // Notify when all fetch operations are completed
                 group.notify(queue: .main) {
                     withAnimation {
                         self.isLoading = false
@@ -112,6 +117,7 @@ struct HealthDataView: View {
     }
 }
 
+// Custom view to display a health data card
 struct HealthCard: View {
     var title: String
     var value: String
@@ -139,6 +145,7 @@ struct HealthCard: View {
     }
 }
 
+// Custom view to display a line chart of heart rate data
 struct LineChartView: View {
     var data: [Double]
     var title: String
@@ -178,6 +185,7 @@ struct LineChartView: View {
     }
 }
 
+// Custom view to display health data in a table format
 struct TableView: View {
     var steps: Double
     var distance: Double

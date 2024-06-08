@@ -1,14 +1,17 @@
 import HealthKit
 
+// HealthStore class manages interactions with the HealthKit API
 class HealthStore {
     var healthStore: HKHealthStore?
 
+    // Initialize the HealthStore and check if HealthKit is available
     init() {
         if HKHealthStore.isHealthDataAvailable() {
             healthStore = HKHealthStore()
         }
     }
 
+    // Request authorization to read health data
     func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
         guard let healthStore = self.healthStore else { return completion(false, nil) }
 
@@ -23,6 +26,7 @@ class HealthStore {
         }
     }
 
+    // Fetch the total steps for the current day
     func fetchSteps(completion: @escaping (Double?, Error?) -> Void) {
         guard let healthStore = self.healthStore else { return completion(nil, nil) }
 
@@ -40,6 +44,7 @@ class HealthStore {
         healthStore.execute(query)
     }
     
+    // Fetch the total distance for the current day
     func fetchDistance(completion: @escaping (Double?, Error?) -> Void) {
            guard let healthStore = self.healthStore else {
                completion(nil, nil)
@@ -61,6 +66,7 @@ class HealthStore {
            healthStore.execute(query)
        }
 
+    // Fetch the heart rate samples for the current day
        func fetchHeartRate(completion: @escaping ([HKQuantitySample]?, Error?) -> Void) {
            guard let healthStore = self.healthStore else {
                completion(nil, nil)
